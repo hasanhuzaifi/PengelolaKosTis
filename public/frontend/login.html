@@ -3,160 +3,267 @@
 <head>
 <meta charset="utf-8"/>
 <meta content="width=device-width, initial-scale=1.0" name="viewport"/>
-<title>Login - Manajemen Kos Al-Firdaus</title>
-<script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
-<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&display=swap" rel="stylesheet"/>
-<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700;900&display=swap" rel="stylesheet"/>
+<title>Login – Manajemen Kos Al-Firdaus</title>
+<link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700&display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:opsz,wght,FILL,GRAD@20..48,100..700,0..1,-50..200" rel="stylesheet"/>
 <script src="https://cdn.jsdelivr.net/npm/axios/dist/axios.min.js"></script>
-<script id="tailwind-config">
-  tailwind.config = {
-    darkMode: "class",
-    theme: {
-      extend: {
-        colors: {
-          "surface-container-lowest": "#ffffff",
-          "primary-hover": "#1D4ED8",
-          "error": "#ba1a1a",
-          "on-primary": "#ffffff",
-          "on-surface-variant": "#434655",
-          "border-base": "#E5E7EB",
-          "text-main": "#111827",
-          "primary-light": "#EFF6FF",
-          "primary": "#004ac6",
-          "on-surface": "#191b23",
-          "bg-canvas": "#F9FAFB",
-          "danger": "#DC2626",
-          "danger-bg": "#FEF2F2",
-          "success": "#16A34A",
-          "success-bg": "#F0FDF4",
-        },
-        borderRadius: { DEFAULT: "0.25rem", lg: "0.5rem", xl: "0.75rem", full: "9999px" },
-        spacing: { "stack-md": "16px", "stack-lg": "24px", "stack-sm": "8px" },
-        fontFamily: { body: ["Inter"], "page-title": ["Inter"], "section-title": ["Inter"], "label-muted": ["Inter"] },
-        fontSize: {
-          "page-title": ["20px", { lineHeight: "28px", fontWeight: "600" }],
-          "label-muted": ["12px", { lineHeight: "16px", fontWeight: "400" }],
-          "section-title": ["16px", { lineHeight: "24px", fontWeight: "600" }],
-          "body": ["14px", { lineHeight: "20px", fontWeight: "400" }],
-        }
-      }
-    }
-  }
-</script>
-<style>body { font-family: 'Inter', sans-serif; }</style>
-</head>
-<body class="min-h-screen bg-bg-canvas flex items-center justify-center p-stack-lg font-body text-body text-text-main">
+<style>
+  *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
 
-<div class="w-full max-w-[400px] bg-surface-container-lowest border border-border-base rounded-lg p-8 flex flex-col gap-stack-lg shadow-sm">
-  
+  :root {
+    --primary:       #1a56db;
+    --primary-dark:  #1341b0;
+    --primary-light: #eef3ff;
+    --success:       #057a55;
+    --success-bg:    #f0fdf4;
+    --success-bdr:   #6ee7b7;
+    --danger:        #c81e1e;
+    --danger-bg:     #fdf2f2;
+    --danger-bdr:    #f8b4b4;
+    --text:          #111928;
+    --muted:         #6b7280;
+    --border:        #e5e7eb;
+    --surface:       #ffffff;
+    --canvas:        #f3f4f6;
+    --radius:        10px;
+    --shadow:        0 1px 3px rgba(0,0,0,.08), 0 1px 2px rgba(0,0,0,.06);
+  }
+
+  body {
+    font-family: 'Plus Jakarta Sans', sans-serif;
+    background: var(--canvas);
+    min-height: 100vh;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    padding: 24px 16px;
+    color: var(--text);
+  }
+
+  .card {
+    background: var(--surface);
+    border: 1px solid var(--border);
+    border-radius: 16px;
+    box-shadow: var(--shadow);
+    width: 100%;
+    max-width: 400px;
+    padding: 36px 32px;
+  }
+
+  .header {
+    text-align: center;
+    margin-bottom: 28px;
+  }
+  .icon-wrap {
+    width: 52px; height: 52px;
+    background: var(--primary-light);
+    border-radius: 14px;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    margin-bottom: 14px;
+  }
+  .icon-wrap .material-symbols-outlined {
+    font-size: 26px;
+    color: var(--primary);
+    font-variation-settings: 'FILL' 1;
+  }
+  .header h1 { font-size: 20px; font-weight: 700; margin-bottom: 4px; }
+  .header p  { font-size: 14px; color: var(--muted); }
+
+  .alert {
+    display: none;
+    border-radius: 8px;
+    padding: 12px 14px;
+    font-size: 13px;
+    margin-bottom: 18px;
+    line-height: 1.5;
+    align-items: center;
+    gap: 8px;
+  }
+  .alert.error   { background: var(--danger-bg);  border: 1px solid var(--danger-bdr);  color: var(--danger); }
+  .alert.success { background: var(--success-bg); border: 1px solid var(--success-bdr); color: var(--success); }
+
+  .form-group { margin-bottom: 16px; }
+  .form-group label {
+    display: block;
+    font-size: 12px;
+    font-weight: 600;
+    color: var(--muted);
+    text-transform: uppercase;
+    letter-spacing: .05em;
+    margin-bottom: 6px;
+  }
+  .form-group input {
+    width: 100%;
+    height: 42px;
+    padding: 0 12px;
+    border: 1.5px solid var(--border);
+    border-radius: var(--radius);
+    font-family: inherit;
+    font-size: 14px;
+    color: var(--text);
+    background: var(--surface);
+    transition: border-color .15s, box-shadow .15s;
+    outline: none;
+  }
+  .form-group input:focus {
+    border-color: var(--primary);
+    box-shadow: 0 0 0 3px rgba(26,86,219,.12);
+  }
+  .form-group input::placeholder { color: #9ca3af; }
+
+  .btn {
+    width: 100%;
+    height: 44px;
+    background: var(--primary);
+    color: #fff;
+    border: none;
+    border-radius: var(--radius);
+    font-family: inherit;
+    font-size: 15px;
+    font-weight: 600;
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 8px;
+    margin-top: 8px;
+    transition: background .15s, transform .1s;
+  }
+  .btn:hover   { background: var(--primary-dark); }
+  .btn:active  { transform: scale(.98); }
+  .btn:disabled { opacity: .65; cursor: not-allowed; }
+
+  .spinner {
+    display: none;
+    width: 18px; height: 18px;
+    border: 2px solid rgba(255,255,255,.4);
+    border-top-color: #fff;
+    border-radius: 50%;
+    animation: spin .7s linear infinite;
+  }
+  @keyframes spin { to { transform: rotate(360deg); } }
+
+  .footer {
+    text-align: center;
+    margin-top: 24px;
+    padding-top: 20px;
+    border-top: 1px solid var(--border);
+    font-size: 14px;
+    color: var(--muted);
+  }
+  .footer a { color: var(--primary); font-weight: 600; text-decoration: none; }
+  .footer a:hover { text-decoration: underline; }
+</style>
+</head>
+<body>
+
+<div class="card">
+
   <!-- Header -->
-  <div class="flex flex-col items-center text-center gap-stack-sm">
-    <div class="w-12 h-12 bg-primary-light text-primary rounded-full flex items-center justify-center mb-2">
-      <span class="material-symbols-outlined text-[28px]" style="font-variation-settings: 'FILL' 1;">business</span>
+  <div class="header">
+    <div class="icon-wrap">
+      <span class="material-symbols-outlined">business</span>
     </div>
-    <h1 class="font-page-title text-page-title text-on-surface">Manajemen Kos Al-Firdaus</h1>
-    <p class="font-body text-body text-on-surface-variant">Masuk ke akun Anda untuk melanjutkan</p>
+    <h1>Manajemen Kos Al-Firdaus</h1>
+    <p>Masuk ke akun Anda untuk melanjutkan</p>
   </div>
 
   <!-- Alert Error -->
-  <div id="alert-error" class="hidden bg-danger-bg border border-danger text-danger text-sm rounded px-4 py-3 flex items-center gap-2">
-    <span class="material-symbols-outlined text-[18px]">error</span>
+  <div class="alert error" id="alert-error">
+    <span class="material-symbols-outlined" style="font-size:18px;font-variation-settings:'FILL' 1;flex-shrink:0">error</span>
     <span id="alert-error-msg">Email atau password salah.</span>
   </div>
 
   <!-- Alert Success -->
-  <div id="alert-success" class="hidden bg-success-bg border border-success text-success text-sm rounded px-4 py-3 flex items-center gap-2">
-    <span class="material-symbols-outlined text-[18px]">check_circle</span>
+  <div class="alert success" id="alert-success">
+    <span class="material-symbols-outlined" style="font-size:18px;font-variation-settings:'FILL' 1;flex-shrink:0">check_circle</span>
     <span>Login berhasil! Mengalihkan ke dashboard...</span>
   </div>
 
   <!-- Form -->
-  <div class="flex flex-col gap-5">
-    <div class="flex flex-col gap-1.5">
-      <label class="font-label-muted text-label-muted text-on-surface-variant uppercase tracking-wider" for="email">Email</label>
-      <input class="w-full h-10 px-3 bg-surface-container-lowest border border-border-base rounded text-text-main font-body text-body focus:outline-none focus:border-primary focus:ring-1 focus:ring-primary transition-colors" 
-             id="email" placeholder="nama@email.com" type="email"/>
-    </div>
-    <div class="flex flex-col gap-1.5">
-      <div class="flex items-center justify-between">
-        <label class="font-label-muted text-label-muted text-on-surface-variant uppercase tracking-wider" for="password">Password</label>
-      </div>
-      <input class="w-full h-10 px-3 bg-surface-container-lowest border border-border-base rounded text-text-main font-body text-body focus:outline-none focus:border-primary focus:ring-1 focus:ring-primary transition-colors" 
-             id="password" placeholder="••••••••" type="password"/>
-    </div>
-    <div class="pt-2">
-      <button id="btn-login"
-              class="w-full h-10 bg-primary hover:bg-primary-hover text-on-primary font-section-title text-section-title rounded transition-colors flex items-center justify-center gap-2"
-              type="button">
-        <span id="btn-login-text">Login</span>
-        <span id="btn-login-icon" class="material-symbols-outlined text-[18px]">arrow_forward</span>
-        <svg id="btn-login-spinner" class="hidden animate-spin h-4 w-4 text-white" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24">
-          <circle class="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" stroke-width="4"></circle>
-          <path class="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8v8H4z"></path>
-        </svg>
-      </button>
-    </div>
+  <div class="form-group">
+    <label for="email">Email</label>
+    <input id="email" type="email" placeholder="nama@email.com" autocomplete="email"/>
   </div>
 
+  <div class="form-group">
+    <label for="password">Password</label>
+    <input id="password" type="password" placeholder="••••••••" autocomplete="current-password"/>
+  </div>
+
+  <button class="btn" id="btn-login" type="button">
+    <span id="btn-text">Login</span>
+    <div class="spinner" id="spinner"></div>
+  </button>
+
   <!-- Footer -->
-  <div class="text-center border-t border-border-base pt-6 mt-2">
-    <p class="font-body text-body text-on-surface-variant">
-      Belum punya akun? <a class="text-primary hover:text-primary-hover font-semibold transition-colors" href="register.html">Daftar</a>
-    </p>
+  <div class="footer">
+    Belum punya akun? <a href="/register">Daftar</a>
   </div>
 
 </div>
 
-<script src="js/auth.js"></script>
+<script src="/frontend/js/auth.js"></script>
 <script>
-  // Jika sudah login, langsung redirect ke dashboard
+  // Redirect jika sudah login
   if (localStorage.getItem('token')) {
-    window.location.href = 'index.html';
+    window.location.href = '/dashboard';
   }
 
-  document.getElementById('btn-login').addEventListener('click', async () => {
-    const email    = document.getElementById('email').value.trim();
-    const password = document.getElementById('password').value;
-    const btnText    = document.getElementById('btn-login-text');
-    const btnIcon    = document.getElementById('btn-login-icon');
-    const btnSpinner = document.getElementById('btn-login-spinner');
-    const alertErr   = document.getElementById('alert-error');
-    const alertErrMsg= document.getElementById('alert-error-msg');
-    const alertOk    = document.getElementById('alert-success');
+  const btnLogin   = document.getElementById('btn-login');
+  const btnText    = document.getElementById('btn-text');
+  const spinner    = document.getElementById('spinner');
+  const alertErr   = document.getElementById('alert-error');
+  const alertErrMsg= document.getElementById('alert-error-msg');
+  const alertOk    = document.getElementById('alert-success');
 
-    // Reset alert
-    alertErr.classList.add('hidden');
-    alertOk.classList.add('hidden');
+  function showError(msg) {
+    alertErrMsg.textContent = msg;
+    alertErr.style.display = 'flex';
+    alertOk.style.display  = 'none';
+  }
 
-    if (!email || !password) {
-      alertErrMsg.textContent = 'Email dan password wajib diisi.';
-      alertErr.classList.remove('hidden');
+  function setLoading(on) {
+    btnLogin.disabled       = on;
+    btnText.textContent     = on ? 'Memproses...' : 'Login';
+    spinner.style.display   = on ? 'block' : 'none';
+  }
+
+  btnLogin.addEventListener('click', async () => {
+    const email = document.getElementById('email').value.trim();
+    const pass  = document.getElementById('password').value;
+
+    alertErr.style.display = 'none';
+    alertOk.style.display  = 'none';
+
+    if (!email || !pass) {
+      showError('Email dan password wajib diisi.');
       return;
     }
 
-    // Loading state
-    btnText.textContent = 'Memproses...';
-    btnIcon.classList.add('hidden');
-    btnSpinner.classList.remove('hidden');
-
+    setLoading(true);
     try {
-      await login(email, password);
-      alertOk.classList.remove('hidden');
-      setTimeout(() => { window.location.href = 'index.html'; }, 1200);
+      // login() dari auth.js → POST /api/login
+      // Backend returns: { status:'success', data:{ token, user } }
+      await login(email, pass);
+      alertOk.style.display = 'flex';
+      setTimeout(() => { window.location.href = '/dashboard'; }, 1200);
     } catch (err) {
       const msg = err.response?.data?.message || 'Email atau password salah.';
-      alertErrMsg.textContent = msg;
-      alertErr.classList.remove('hidden');
+      showError(msg);
     } finally {
-      btnText.textContent = 'Login';
-      btnIcon.classList.remove('hidden');
-      btnSpinner.classList.add('hidden');
+      setLoading(false);
     }
   });
 
-  // Enter key support
-  document.getElementById('password').addEventListener('keydown', (e) => {
-    if (e.key === 'Enter') document.getElementById('btn-login').click();
+  // Enter key
+  document.getElementById('password').addEventListener('keydown', e => {
+    if (e.key === 'Enter') btnLogin.click();
+  });
+  document.getElementById('email').addEventListener('keydown', e => {
+    if (e.key === 'Enter') btnLogin.click();
   });
 </script>
 </body>

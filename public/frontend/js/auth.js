@@ -1,154 +1,139 @@
 /**
  * auth.js – Auth Service Frontend
  * Manajemen Kos Al-Firdaus
+ * Sinkron dengan AuthController.php (Dev 1 - Hasan)
  *
- * Tanggung jawab:
- *  - Menyimpan & menghapus JWT token di localStorage
- *  - Auto-inject Authorization header ke semua request Axios
- *  - Fungsi helper: register, login, logout, getProfile, updateProfile
- *  - Guard: redirect ke login jika token tidak ada (gunakan requireAuth())
+ * Response structure dari backend:
+ *   { status, message, data: { token, user } }  ← login
+ *   { status, message, data: { user } }          ← register / profile
+ *   { status, message }                          ← logout
  */
 
-// ─── Base URL API ────────────────────────────────────────────────────────────
-// Sesuaikan jika port berbeda
-const API_BASE_URL = 'http://localhost:8000/api';
+// ─── Base URL ─────────────────────────────────────────────────────────────────
+const API_BASE_URL = 'http://127.0.0.1:8000/api';
 
-// ─── Setup Axios defaults ────────────────────────────────────────────────────
+// ─── Axios defaults ───────────────────────────────────────────────────────────
 axios.defaults.baseURL = API_BASE_URL;
-axios.defaults.headers.common['Accept'] = 'application/json';
+axios.defaults.headers.common['Accept']       = 'application/json';
 axios.defaults.headers.common['Content-Type'] = 'application/json';
 
-// Inject token dari localStorage ke setiap request jika ada
-const storedToken = localStorage.getItem('token');
-if (storedToken) {
-  axios.defaults.headers.common['Authorization'] = 'Bearer ' + storedToken;
+// Inject token dari localStorage jika sudah ada
+const _storedToken = localStorage.getItem('token');
+if (_storedToken) {
+    axios.defaults.headers.common['Authorization'] = 'Bearer ' + _storedToken;
 }
 
-// ─── Interceptor: tangani 401 global (token expired / tidak valid) ────────────
+// ─── Interceptor 401 global ───────────────────────────────────────────────────
 axios.interceptors.response.use(
-  response => response,
-  error => {
-    if (error.response && error.response.status === 401) {
-      // Hapus token kedaluwarsa & redirect ke login
-      clearAuth();
-      // Jangan redirect jika sudah di halaman login/register
-      const path = window.location.pathname;
-      if (!path.includes('login.html') && !path.includes('register.html')) {
-        window.location.href = 'login.html';
-      }
+    response => response,
+    error => {
+        if (error.response && error.response.status === 401) {
+            clearAuth();
+            const path = window.location.pathname;
+            if (!path.includes('login.html') && !path.includes('register.html')) {
+                window.location.href = '/login';
+            }
+        }
+        return Promise.reject(error);
     }
-    return Promise.reject(error);
-  }
 );
 
-// ─── Helper: simpan token ────────────────────────────────────────────────────
+// ─── Helpers token ────────────────────────────────────────────────────────────
 function setToken(token) {
-  localStorage.setItem('token', token);
-  axios.defaults.headers.common['Authorization'] = 'Bearer ' + token;
+    localStorage.setItem('token', token);
+    axios.defaults.headers.common['Authorization'] = 'Bearer ' + token;
 }
 
-// ─── Helper: hapus token ─────────────────────────────────────────────────────
 function clearAuth() {
-  localStorage.removeItem('token');
-  localStorage.removeItem('user');
-  delete axios.defaults.headers.common['Authorization'];
+    localStorage.removeItem('token');
+    localStorage.removeItem('user');
+    delete axios.defaults.headers.common['Authorization'];
 }
 
-// ─── Guard: panggil di setiap halaman yang butuh login ───────────────────────
 function requireAuth() {
-  if (!localStorage.getItem('token')) {
-    window.location.href = 'login.html';
-  }
+    if (!localStorage.getItem('token')) {
+        window.location.href = '/login';
+    }
 }
 
-// ─── Auth API Functions ──────────────────────────────────────────────────────
+function getCurrentUser() {
+    const raw = localStorage.getItem('user');
+    try { return raw ? JSON.parse(raw) : null; } catch { return null; }
+}
+
+function renderUserInfo() {
+    const user = getCurrentUser();
+    const el = document.getElementById('user-name');
+    if (el && user) el.textContent = user.name || 'Admin';
+}
+
+// ─── API Functions ────────────────────────────────────────────────────────────
 
 /**
- * Register akun pemilik kos baru
- * @param {string} name
- * @param {string} email
- * @param {string} password
- * @returns {Promise}
+ * Register – POST /api/register
+ * Backend expects: name, email, password, password_confirmation
+ * Backend returns: { status:'success', message, data:{ user } } 201
  */
 async function register(name, email, password) {
-  const response = await axios.post('/register', {
-    name,
-    email,
-    password,
-    password_confirmation: password,
-    role: 'admin'
-  });
-  return response.data;
+    const response = await axios.post('/register', {
+        name,
+        email,
+        password,
+        password_confirmation: password,
+        role: 'admin'          // backend hardcode 'admin', tapi kirim saja
+    });
+    return response.data;
 }
 
 /**
- * Login dan simpan token JWT
- * @param {string} email
- * @param {string} password
- * @returns {Promise}
+ * Login – POST /api/login
+ * Backend expects: email, password
+ * Backend returns: { status:'success', message, data:{ token, user } } 200
  */
 async function login(email, password) {
-  const response = await axios.post('/login', { email, password });
-  const data = response.data;
+    const response = await axios.post('/login', { email, password });
+    const data = response.data;
 
-  // Simpan token
-  const token = data.data?.token || data.token;
-  if (token) {
-    setToken(token);
-  }
+    // Ambil token & user dari data.data (sesuai struktur AuthController)
+    const token = data.data?.token;
+    const user  = data.data?.user;
 
-  // Simpan info user
-  const user = data.data?.user || data.user;
-  if (user) {
-    localStorage.setItem('user', JSON.stringify(user));
-  }
+    if (token) setToken(token);
+    if (user)  localStorage.setItem('user', JSON.stringify(user));
 
-  return data;
+    return data;
 }
 
 /**
- * Logout dan hapus token
- * @returns {Promise}
+ * Logout – POST /api/logout  [JWT]
+ * Backend returns: { status:'success', message } 200
  */
 async function logout() {
-  try {
-    await axios.post('/logout');
-  } finally {
-    clearAuth();
-    window.location.href = 'login.html';
-  }
+    try {
+        await axios.post('/logout');
+    } catch (e) {
+        // token sudah expired/invalid, tetap lanjut hapus lokal
+    } finally {
+        clearAuth();
+        window.location.href = '/login';
+    }
 }
 
 /**
- * Ambil profil pemilik kos yang sedang login
- * @returns {Promise}
+ * Get Profile – GET /api/profile  [JWT]
+ * Backend returns: { status:'success', data:{ user } } 200
  */
 async function getProfile() {
-  const response = await axios.get('/profile');
-  return response.data;
+    const response = await axios.get('/profile');
+    return response.data;
 }
 
 /**
- * Update profil pemilik kos
- * @param {Object} payload - { name, email, password? }
- * @returns {Promise}
+ * Update Profile – PUT /api/profile  [JWT]
+ * Backend expects: name?, email?, password?, password_confirmation?
+ * Backend returns: { status:'success', message, data:{ user } } 200
  */
 async function updateProfile(payload) {
-  const response = await axios.put('/profile', payload);
-  return response.data;
-}
-
-// ─── Helper: ambil data user dari localStorage ───────────────────────────────
-function getCurrentUser() {
-  const raw = localStorage.getItem('user');
-  return raw ? JSON.parse(raw) : null;
-}
-
-// ─── Helper: render nama user di navbar ─────────────────────────────────────
-function renderUserInfo() {
-  const user = getCurrentUser();
-  const el = document.getElementById('user-name');
-  if (el && user) {
-    el.textContent = user.name || 'Admin';
-  }
+    const response = await axios.put('/profile', payload);
+    return response.data;
 }
