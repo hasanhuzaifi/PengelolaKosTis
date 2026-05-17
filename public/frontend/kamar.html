@@ -1,0 +1,449 @@
+<!DOCTYPE html>
+
+<html lang="id"><head>
+<meta charset="utf-8"/>
+<meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+<title>Manajemen Kamar - Al-Firdaus</title>
+<script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com" rel="preconnect"/>
+<link crossorigin="" href="https://fonts.gstatic.com" rel="preconnect"/>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700;900&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<script id="tailwind-config">
+        tailwind.config = {
+          darkMode: "class",
+          theme: {
+            extend: {
+              "colors": {
+                      "surface-container-lowest": "#ffffff",
+                      "primary-hover": "#1D4ED8",
+                      "error": "#ba1a1a",
+                      "tertiary-container": "#bc4800",
+                      "secondary": "#585f6c",
+                      "danger": "#DC2626",
+                      "on-primary": "#ffffff",
+                      "on-primary-fixed-variant": "#003ea8",
+                      "danger-bg": "#FEF2F2",
+                      "on-background": "#191b23",
+                      "tertiary-fixed-dim": "#ffb596",
+                      "primary-light": "#EFF6FF",
+                      "success-bg": "#F0FDF4",
+                      "on-surface-variant": "#434655",
+                      "surface-container-high": "#e7e7f3",
+                      "border-base": "#E5E7EB",
+                      "primary-fixed": "#dbe1ff",
+                      "on-secondary-container": "#5e6572",
+                      "surface-container": "#ededf9",
+                      "on-tertiary-fixed-variant": "#7d2d00",
+                      "text-main": "#111827",
+                      "success": "#16A34A",
+                      "surface-bright": "#faf8ff",
+                      "on-secondary": "#ffffff",
+                      "primary-fixed-dim": "#b4c5ff",
+                      "warning-bg": "#FFFBEB",
+                      "inverse-primary": "#b4c5ff",
+                      "primary": "#004ac6",
+                      "surface-tint": "#0053db",
+                      "secondary-container": "#dce2f3",
+                      "error-container": "#ffdad6",
+                      "warning": "#D97706",
+                      "surface-dim": "#d9d9e5",
+                      "on-error": "#ffffff",
+                      "on-primary-fixed": "#00174b",
+                      "bg-canvas": "#F9FAFB",
+                      "inverse-on-surface": "#f0f0fb",
+                      "primary-container": "#2563eb",
+                      "outline-variant": "#c3c6d7",
+                      "outline": "#737686",
+                      "surface-container-low": "#f3f3fe",
+                      "on-surface": "#191b23",
+                      "on-error-container": "#93000a",
+                      "tertiary": "#943700",
+                      "on-secondary-fixed-variant": "#404754",
+                      "surface-container-highest": "#e1e2ed",
+                      "surface": "#faf8ff",
+                      "background": "#faf8ff",
+                      "tertiary-fixed": "#ffdbcd",
+                      "inverse-surface": "#2e3039",
+                      "on-primary-container": "#eeefff",
+                      "secondary-fixed-dim": "#c0c7d6",
+                      "secondary-fixed": "#dce2f3",
+                      "on-tertiary-container": "#ffede6",
+                      "surface-variant": "#e1e2ed",
+                      "on-tertiary-fixed": "#360f00",
+                      "on-tertiary": "#ffffff",
+                      "on-secondary-fixed": "#151c27"
+              },
+              "borderRadius": {
+                      "DEFAULT": "0.25rem",
+                      "lg": "0.5rem",
+                      "xl": "0.75rem",
+                      "full": "9999px"
+              },
+              "spacing": {
+                      "sidebar-width": "220px",
+                      "stack-md": "16px",
+                      "stack-lg": "24px",
+                      "container-padding": "24px",
+                      "stack-sm": "8px",
+                      "gutter": "16px"
+              },
+              "fontFamily": {
+                      "page-title": [
+                              "Inter"
+                      ],
+                      "label-muted": [
+                              "Inter"
+                      ],
+                      "stat-number": [
+                              "Inter"
+                      ],
+                      "section-title": [
+                              "Inter"
+                      ],
+                      "body": [
+                              "Inter"
+                      ]
+              },
+              "fontSize": {
+                      "page-title": [
+                              "20px",
+                              {
+                                      "lineHeight": "28px",
+                                      "fontWeight": "600"
+                              }
+                      ],
+                      "label-muted": [
+                              "12px",
+                              {
+                                      "lineHeight": "16px",
+                                      "fontWeight": "400"
+                              }
+                      ],
+                      "stat-number": [
+                              "28px",
+                              {
+                                      "lineHeight": "1.2",
+                                      "fontWeight": "700"
+                              }
+                      ],
+                      "section-title": [
+                              "16px",
+                              {
+                                      "lineHeight": "24px",
+                                      "fontWeight": "600"
+                              }
+                      ],
+                      "body": [
+                              "14px",
+                              {
+                                      "lineHeight": "20px",
+                                      "fontWeight": "400"
+                              }
+                      ]
+              }
+      },
+          },
+        }
+    </script>
+<script src="https://cdn.jsdelivr.net/npm/axios/dist/axios.min.js"></script>
+</head>
+<body class="bg-bg-canvas font-body text-body text-text-main h-screen flex overflow-hidden">
+<!-- SideNavBar -->
+<aside class="bg-surface-container-lowest fixed left-0 top-0 h-screen w-[220px] border-r border-border-base flex flex-col py-stack-lg z-20 hidden md:flex">
+<div class="px-6 mb-8">
+<h1 class="font-page-title text-page-title font-bold text-primary">Al-Firdaus</h1>
+<p class="font-label-muted text-label-muted text-on-surface-variant">Manajemen Kos</p>
+</div>
+<nav class="flex-1 px-4 flex flex-col gap-2">
+<!-- Dashboard (Inactive) -->
+<a class="flex items-center gap-3 px-4 py-3 rounded-lg text-on-surface-variant hover:bg-surface-container-low transition-colors duration-200" href="dashboard.html">
+<span class="material-symbols-outlined">dashboard</span>
+<span class="font-body text-body font-semibold">Dashboard</span>
+</a>
+<!-- Kamar (Active) -->
+<a class="flex items-center gap-3 px-4 py-3 rounded-lg bg-primary-light text-primary font-bold border-r-4 border-primary hover:bg-surface-container-low transition-colors duration-200" href="kamar.html">
+<span class="material-symbols-outlined" style="font-variation-settings: 'FILL' 1;">meeting_room</span>
+<span class="font-body text-body font-semibold">Kamar</span>
+</a>
+<!-- Penyewa (Inactive) -->
+<a class="flex items-center gap-3 px-4 py-3 rounded-lg text-on-surface-variant hover:bg-surface-container-low transition-colors duration-200" href="penyewa.html">
+<span class="material-symbols-outlined">group</span>
+<span class="font-body text-body font-semibold">Penyewa</span>
+</a>
+<!-- Pembayaran (Inactive) -->
+<a class="flex items-center gap-3 px-4 py-3 rounded-lg text-on-surface-variant hover:bg-surface-container-low transition-colors duration-200" href="pembayaran.html">
+<span class="material-symbols-outlined">payments</span>
+<span class="font-body text-body font-semibold">Pembayaran</span>
+</a>
+</nav>
+<div class="px-4 mt-auto">
+<a class="flex items-center gap-3 px-4 py-3 rounded-lg text-on-surface-variant hover:bg-surface-container-low transition-colors duration-200" href="#" onclick="logout()">
+<span class="material-symbols-outlined">logout</span>
+<span class="font-body text-body font-semibold">Logout</span>
+</a>
+</div>
+</aside>
+<!-- Main Content Wrapper -->
+<div class="flex-1 flex flex-col md:ml-[220px] h-screen overflow-hidden relative">
+<!-- TopAppBar -->
+<header class="bg-surface flex items-center justify-between px-container-padding h-16 border-b border-border-base hidden md:flex z-10 shrink-0">
+<div class="flex items-center gap-4 w-full justify-between">
+<div class="font-page-title text-page-title font-black text-on-surface">Manajemen Kos Al-Firdaus</div>
+<div class="flex items-center gap-4">
+<button class="text-on-surface-variant hover:text-primary transition-all opacity-80 hover:opacity-100 flex items-center justify-center w-10 h-10 rounded-full hover:bg-surface-container-low">
+<span class="material-symbols-outlined">search</span>
+</button>
+<button class="text-on-surface-variant hover:text-primary transition-all opacity-80 hover:opacity-100 flex items-center justify-center w-10 h-10 rounded-full hover:bg-surface-container-low">
+<span class="material-symbols-outlined">notifications</span>
+</button>
+<button class="text-on-surface-variant hover:text-primary transition-all opacity-80 hover:opacity-100 flex items-center justify-center w-10 h-10 rounded-full hover:bg-surface-container-low">
+<span class="material-symbols-outlined">settings</span>
+</button>
+<div class="w-8 h-8 rounded-full bg-surface-container-highest overflow-hidden ml-2">
+<img alt="User Profile" class="w-full h-full object-cover" src="https://lh3.googleusercontent.com/aida-public/AB6AXuDyiDwo55WnlHzmVRrLHktJ3y4FmgphIb68-e7p7F9YKkZ1xnX7sPTk9KGEYDf_T5Oz54Ehjk1UN7ZsAUYvAsrmoHaTk93zDzX5orbsmYvU486vHPXvKpCUHMsYAbDcsOfiS3CYAPWN1Rk6OTfTYXqbPZFhrRvzO_ob9UEdbc_TxpBAYsieryWZZ21gmHDv4K86u1mLCHyaVSxS23lyk3VnBMOK2mI1DS4qn60MjySeQDTHJIRdvcAh41y0RERg_gFCpYSd7N_Xne4"/>
+</div>
+</div>
+</div>
+</header>
+<!-- Main Canvas -->
+<main class="flex-1 overflow-y-auto p-container-padding bg-bg-canvas">
+<!-- Page Header & Actions -->
+<div class="flex flex-col sm:flex-row sm:items-center justify-between mb-8 gap-4">
+<h2 class="font-page-title text-page-title text-text-main">Manajemen Kamar</h2>
+<button class="bg-primary hover:bg-primary-hover text-on-primary px-4 py-2 rounded-lg font-body text-body font-semibold transition-colors duration-200 flex items-center gap-2" onclick="openModal()">
+<span class="material-symbols-outlined">add</span>
+                    Tambah Kamar
+                </button>
+</div>
+<!-- Bento Grid - Room Cards -->
+<div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6" id="kamarContainer">
+<!-- Cards will be loaded dynamically by JavaScript -->
+</div>
+</main>
+</div>
+<!-- Modal Overlay: Tambah/Edit Kamar -->
+<div class="hidden fixed inset-0 bg-text-main/50 backdrop-blur-sm z-50 flex items-center justify-center p-4" id="modalOverlay">
+<div class="bg-surface-container-lowest rounded-xl shadow-xl w-full max-w-md overflow-hidden flex flex-col max-h-[921px]">
+<!-- Modal Header -->
+<div class="px-6 py-4 border-b border-border-base flex justify-between items-center bg-surface shrink-0">
+<h3 class="font-section-title text-section-title text-text-main" id="modalTitle">Tambah Kamar Baru</h3>
+<button class="text-on-surface-variant hover:text-text-main rounded-full p-1 hover:bg-surface-container-low transition-colors" onclick="closeModal()">
+<span class="material-symbols-outlined">close</span>
+</button>
+</div>
+<!-- Modal Body (Scrollable) -->
+<div class="p-6 overflow-y-auto flex-1">
+<form class="space-y-5" id="kamarForm">
+<!-- Nomor Kamar -->
+<div>
+<label class="block font-label-muted text-label-muted text-on-surface-variant mb-1">Nomor Kamar</label>
+<input class="w-full px-4 py-2 border border-border-base rounded-lg bg-surface-container-lowest text-text-main font-body text-body focus:outline-none focus:border-primary focus:ring-1 focus:ring-primary transition-colors placeholder:text-on-surface-variant/50" placeholder="Misal: 105" type="text" id="nomor_kamar" name="nomor_kamar"/>
+</div>
+<!-- Tipe Kamar -->
+<div>
+<label class="block font-label-muted text-label-muted text-on-surface-variant mb-1">Tipe Kamar</label>
+<select class="w-full px-4 py-2 border border-border-base rounded-lg bg-surface-container-lowest text-text-main font-body text-body focus:outline-none focus:border-primary focus:ring-1 focus:ring-primary transition-colors appearance-none cursor-pointer" id="tipe" name="tipe">
+<option value="">Pilih Tipe Kamar</option>
+<option value="standar">Standar</option>
+<option value="deluxe">Deluxe</option>
+<option value="vip">VIP</option>
+</select>
+</div>
+<!-- Harga / Bulan -->
+<div>
+<label class="block font-label-muted text-label-muted text-on-surface-variant mb-1">Harga (Rp) / Bulan</label>
+<div class="relative">
+<span class="absolute left-4 top-1/2 -translate-y-1/2 text-on-surface-variant font-body text-body">Rp</span>
+<input class="w-full pl-10 pr-4 py-2 border border-border-base rounded-lg bg-surface-container-lowest text-text-main font-body text-body focus:outline-none focus:border-primary focus:ring-1 focus:ring-primary transition-colors placeholder:text-on-surface-variant/50" placeholder="500000" type="number" id="harga_per_bulan" name="harga_per_bulan"/>
+</div>
+</div>
+<!-- Fasilitas -->
+<div>
+<label class="block font-label-muted text-label-muted text-on-surface-variant mb-2">Fasilitas (Pilih yang sesuai)</label>
+<div class="grid grid-cols-2 gap-3">
+<label class="flex items-center gap-2 cursor-pointer p-2 border border-border-base rounded-lg hover:bg-surface-container-low transition-colors">
+<input class="rounded text-primary focus:ring-primary border-border-base" type="checkbox" value="AC" data-fasilitas="AC"/>
+<span class="font-body text-body text-text-main">AC</span>
+</label>
+<label class="flex items-center gap-2 cursor-pointer p-2 border border-border-base rounded-lg hover:bg-surface-container-low transition-colors">
+<input class="rounded text-primary focus:ring-primary border-border-base" type="checkbox" value="WiFi" data-fasilitas="WiFi"/>
+<span class="font-body text-body text-text-main">WiFi</span>
+</label>
+<label class="flex items-center gap-2 cursor-pointer p-2 border border-border-base rounded-lg hover:bg-surface-container-low transition-colors">
+<input class="rounded text-primary focus:ring-primary border-border-base" type="checkbox" value="KM Dalam" data-fasilitas="KM Dalam"/>
+<span class="font-body text-body text-text-main">KM Dalam</span>
+</label>
+<label class="flex items-center gap-2 cursor-pointer p-2 border border-border-base rounded-lg hover:bg-surface-container-low transition-colors">
+<input class="rounded text-primary focus:ring-primary border-border-base" type="checkbox" value="TV" data-fasilitas="TV"/>
+<span class="font-body text-body text-text-main">TV</span>
+</label>
+</div>
+</div>
+<!-- Status -->
+<div>
+<label class="block font-label-muted text-label-muted text-on-surface-variant mb-1">Status Awal</label>
+<select class="w-full px-4 py-2 border border-border-base rounded-lg bg-surface-container-lowest text-text-main font-body text-body focus:outline-none focus:border-primary focus:ring-1 focus:ring-primary transition-colors appearance-none cursor-pointer" id="status" name="status">
+<option value="tersedia">Tersedia</option>
+<option value="terisi">Terisi</option>
+</select>
+</div>
+</form>
+</div>
+<!-- Modal Footer -->
+<div class="px-6 py-4 border-t border-border-base bg-surface flex justify-end gap-3 shrink-0">
+<button class="px-4 py-2 rounded-lg font-body text-body font-semibold text-on-surface-variant hover:bg-surface-container-low transition-colors" onclick="closeModal()">Batal</button>
+<button class="bg-primary hover:bg-primary-hover text-on-primary px-6 py-2 rounded-lg font-body text-body font-semibold transition-colors shadow-sm" onclick="saveKamar()">Simpan</button>
+</div>
+</div>
+</div>
+<script>
+const API_URL = 'http://localhost:8000/api';
+const token = localStorage.getItem('token');
+let currentModalMode = 'add'; // 'add' atau 'edit'
+let currentKamarId = null;
+
+// Load kamar saat page dimuat
+document.addEventListener('DOMContentLoaded', function() {
+    loadKamar();
+});
+
+async function loadKamar() {
+    try {
+        const response = await axios.get(`${API_URL}/kamar`, {
+            headers: { 'Authorization': `Bearer ${token}` }
+        });
+        
+        const kamarContainer = document.getElementById('kamarContainer');
+        kamarContainer.innerHTML = '';
+        
+        response.data.data.forEach(kamar => {
+            const statusBg = kamar.status === 'tersedia' ? 'bg-success-bg text-success' : 'bg-warning-bg text-warning';
+            const statusText = kamar.status === 'tersedia' ? 'TERSEDIA' : 'TERISI';
+            const fasilitas = kamar.fasilitas || [];
+            
+            const card = document.createElement('div');
+            card.className = 'bg-surface-container-lowest border border-border-base rounded-lg p-6 flex flex-col relative overflow-hidden group';
+            card.innerHTML = `
+                <div class="absolute top-0 right-0 w-24 h-24 bg-gradient-to-br from-primary-light to-transparent opacity-50 rounded-bl-full -mr-4 -mt-4 transition-transform group-hover:scale-110"></div>
+                <div class="flex justify-between items-start mb-4 relative z-10">
+                    <div>
+                        <span class="font-stat-number text-stat-number text-text-main block">${kamar.nomor_kamar}</span>
+                        <span class="font-label-muted text-label-muted text-on-surface-variant uppercase tracking-wider">${kamar.tipe}</span>
+                    </div>
+                    <span class="${statusBg} px-3 py-1 rounded-full font-label-muted text-label-muted font-semibold border border-opacity-20">${statusText}</span>
+                </div>
+                <div class="mb-4 relative z-10">
+                    <span class="font-section-title text-section-title text-primary block mb-1">Rp ${parseInt(kamar.harga_per_bulan).toLocaleString('id-ID')}<span class="text-on-surface-variant font-body text-body font-normal">/bulan</span></span>
+                </div>
+                <div class="mb-6 flex-1 relative z-10">
+                    ${fasilitas.map(f => `
+                        <div class="flex items-center gap-2 text-on-surface-variant font-body text-body mb-2">
+                            <span class="material-symbols-outlined text-[18px]">check_circle</span>
+                            <span>${f}</span>
+                        </div>
+                    `).join('')}
+                </div>
+                <div class="flex gap-3 pt-4 border-t border-border-base relative z-10">
+                    <button class="flex-1 border border-border-base text-text-main hover:bg-surface-container-low px-4 py-2 rounded-lg font-body text-body transition-colors duration-200" onclick="editKamar(${kamar.id})">Edit</button>
+                    <button class="flex-1 border border-danger text-danger hover:bg-danger-bg px-4 py-2 rounded-lg font-body text-body transition-colors duration-200" onclick="deleteKamar(${kamar.id})">Hapus</button>
+                </div>
+            `;
+            kamarContainer.appendChild(card);
+        });
+    } catch (error) {
+        alert('Gagal memuat data kamar: ' + error.message);
+    }
+}
+
+function openModal() {
+    currentModalMode = 'add';
+    currentKamarId = null;
+    document.getElementById('modalTitle').textContent = 'Tambah Kamar Baru';
+    document.getElementById('kamarForm').reset();
+    document.getElementById('modalOverlay').classList.remove('hidden');
+}
+
+function closeModal() {
+    document.getElementById('modalOverlay').classList.add('hidden');
+}
+
+async function editKamar(id) {
+    try {
+        const response = await axios.get(`${API_URL}/kamar/${id}`, {
+            headers: { 'Authorization': `Bearer ${token}` }
+        });
+        
+        const kamar = response.data.data;
+        currentModalMode = 'edit';
+        currentKamarId = id;
+        document.getElementById('modalTitle').textContent = 'Edit Kamar';
+        
+        document.getElementById('nomor_kamar').value = kamar.nomor_kamar;
+        document.getElementById('tipe').value = kamar.tipe;
+        document.getElementById('harga_per_bulan').value = kamar.harga_per_bulan;
+        document.getElementById('status').value = kamar.status;
+        
+        // Set fasilitas checkboxes
+        document.querySelectorAll('[data-fasilitas]').forEach(checkbox => {
+            checkbox.checked = kamar.fasilitas && kamar.fasilitas.includes(checkbox.value);
+        });
+        
+        document.getElementById('modalOverlay').classList.remove('hidden');
+    } catch (error) {
+        alert('Gagal memuat data kamar: ' + error.message);
+    }
+}
+
+async function saveKamar() {
+    try {
+        const fasilitas = Array.from(document.querySelectorAll('[data-fasilitas]:checked')).map(cb => cb.value);
+        
+        const data = {
+            nomor_kamar: document.getElementById('nomor_kamar').value,
+            tipe: document.getElementById('tipe').value,
+            harga_per_bulan: parseFloat(document.getElementById('harga_per_bulan').value),
+            fasilitas: fasilitas,
+            status: document.getElementById('status').value
+        };
+        
+        if (currentModalMode === 'add') {
+            await axios.post(`${API_URL}/kamar`, data, {
+                headers: { 'Authorization': `Bearer ${token}` }
+            });
+            alert('Kamar berhasil ditambahkan');
+        } else {
+            await axios.put(`${API_URL}/kamar/${currentKamarId}`, data, {
+                headers: { 'Authorization': `Bearer ${token}` }
+            });
+            alert('Kamar berhasil diperbarui');
+        }
+        
+        closeModal();
+        loadKamar();
+    } catch (error) {
+        alert('Gagal menyimpan kamar: ' + error.response?.data?.message || error.message);
+    }
+}
+
+async function deleteKamar(id) {
+    if (confirm('Apakah Anda yakin ingin menghapus kamar ini?')) {
+        try {
+            await axios.delete(`${API_URL}/kamar/${id}`, {
+                headers: { 'Authorization': `Bearer ${token}` }
+            });
+            alert('Kamar berhasil dihapus');
+            loadKamar();
+        } catch (error) {
+            alert('Gagal menghapus kamar: ' + error.message);
+        }
+    }
+}
+
+function logout() {
+    localStorage.removeItem('token');
+    window.location.href = 'login.html';
+}
+</script>
+</body></html>

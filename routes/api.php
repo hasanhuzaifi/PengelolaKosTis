@@ -2,6 +2,8 @@
 
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\AuthController;
+use App\Http\Controllers\KamarController;
+use App\Http\Controllers\PenyewaController;
 
 // ═══════════════════════════════════════════════════════════════════════════
 // AUTH SERVICE ROUTES – Dev 1 (Hasan)
@@ -21,10 +23,9 @@ Route::middleware('jwt.auth')->group(function () {
 
     // ═══════════════════════════════════════════════════════════════════════
     // PROPERTY MANAGEMENT ROUTES – Dev 2 (Rafi)
-    // Tambahkan di bawah ini setelah merge feature/property
     // ═══════════════════════════════════════════════════════════════════════
-    // Route::apiResource('kamar',   KamarController::class);
-    // Route::apiResource('penyewa', PenyewaController::class);
+    Route::apiResource('kamar',   KamarController::class);
+    Route::apiResource('penyewa', PenyewaController::class);
 
     // ═══════════════════════════════════════════════════════════════════════
     // PAYMENT & REPORT ROUTES – Dev 3 (Hazel)
