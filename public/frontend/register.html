@@ -3,194 +3,296 @@
 <head>
 <meta charset="utf-8"/>
 <meta content="width=device-width, initial-scale=1.0" name="viewport"/>
-<title>Daftar Akun Baru - Manajemen Kos Al-Firdaus</title>
-<script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
-<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&display=swap" rel="stylesheet"/>
-<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700;900&display=swap" rel="stylesheet"/>
+<title>Daftar Akun – Manajemen Kos Al-Firdaus</title>
+<link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700&display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:opsz,wght,FILL,GRAD@20..48,100..700,0..1,-50..200" rel="stylesheet"/>
 <script src="https://cdn.jsdelivr.net/npm/axios/dist/axios.min.js"></script>
-<script id="tailwind-config">
-  tailwind.config = {
-    darkMode: "class",
-    theme: {
-      extend: {
-        colors: {
-          "surface-container-lowest": "#ffffff",
-          "primary-hover": "#1D4ED8",
-          "on-primary": "#ffffff",
-          "on-surface-variant": "#434655",
-          "border-base": "#E5E7EB",
-          "text-main": "#111827",
-          "primary-light": "#EFF6FF",
-          "primary": "#004ac6",
-          "on-surface": "#191b23",
-          "bg-canvas": "#F9FAFB",
-          "danger": "#DC2626",
-          "danger-bg": "#FEF2F2",
-          "success": "#16A34A",
-          "success-bg": "#F0FDF4",
-          "surface-container": "#ededf9",
-        },
-        borderRadius: { DEFAULT: "0.25rem", lg: "0.5rem", xl: "0.75rem", full: "9999px" },
-        spacing: { "stack-md": "16px", "stack-lg": "24px", "stack-sm": "8px", "container-padding": "24px" },
-        fontFamily: { body: ["Inter"], "page-title": ["Inter"], "section-title": ["Inter"], "label-muted": ["Inter"] },
-        fontSize: {
-          "page-title": ["20px", { lineHeight: "28px", fontWeight: "600" }],
-          "label-muted": ["12px", { lineHeight: "16px", fontWeight: "400" }],
-          "section-title": ["16px", { lineHeight: "24px", fontWeight: "600" }],
-          "body": ["14px", { lineHeight: "20px", fontWeight: "400" }],
-        }
-      }
-    }
-  }
-</script>
-<style>body { font-family: 'Inter', sans-serif; }</style>
-</head>
-<body class="bg-bg-canvas min-h-screen flex items-center justify-center font-body text-body text-text-main p-container-padding">
+<style>
+  *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
 
-<div class="w-full max-w-[400px] bg-surface-container-lowest border border-border-base rounded-lg p-stack-lg shadow-sm">
+  :root {
+    --primary:       #1a56db;
+    --primary-dark:  #1341b0;
+    --primary-light: #eef3ff;
+    --success:       #057a55;
+    --success-bg:    #f0fdf4;
+    --success-bdr:   #6ee7b7;
+    --danger:        #c81e1e;
+    --danger-bg:     #fdf2f2;
+    --danger-bdr:    #f8b4b4;
+    --text:          #111928;
+    --muted:         #6b7280;
+    --border:        #e5e7eb;
+    --surface:       #ffffff;
+    --canvas:        #f3f4f6;
+    --radius:        10px;
+    --shadow:        0 1px 3px rgba(0,0,0,.08), 0 1px 2px rgba(0,0,0,.06);
+  }
+
+  body {
+    font-family: 'Plus Jakarta Sans', sans-serif;
+    background: var(--canvas);
+    min-height: 100vh;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    padding: 24px 16px;
+    color: var(--text);
+  }
+
+  .card {
+    background: var(--surface);
+    border: 1px solid var(--border);
+    border-radius: 16px;
+    box-shadow: var(--shadow);
+    width: 100%;
+    max-width: 420px;
+    padding: 36px 32px;
+  }
+
+  /* ── Header ── */
+  .header {
+    text-align: center;
+    margin-bottom: 28px;
+  }
+  .icon-wrap {
+    width: 52px; height: 52px;
+    background: var(--primary-light);
+    border-radius: 14px;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    margin-bottom: 14px;
+  }
+  .icon-wrap .material-symbols-outlined {
+    font-size: 26px;
+    color: var(--primary);
+    font-variation-settings: 'FILL' 1;
+  }
+  .header h1 { font-size: 20px; font-weight: 700; margin-bottom: 4px; }
+  .header p  { font-size: 14px; color: var(--muted); }
+
+  /* ── Alert ── */
+  .alert {
+    display: none;
+    border-radius: 8px;
+    padding: 12px 14px;
+    font-size: 13px;
+    margin-bottom: 18px;
+    line-height: 1.5;
+  }
+  .alert.error   { background: var(--danger-bg);  border: 1px solid var(--danger-bdr);  color: var(--danger); }
+  .alert.success { background: var(--success-bg); border: 1px solid var(--success-bdr); color: var(--success); display: flex; align-items: center; gap: 8px; }
+  .alert ul { padding-left: 18px; margin: 0; }
+  .alert li { margin-top: 2px; }
+
+  /* ── Form ── */
+  .form-group { margin-bottom: 16px; }
+  .form-group label {
+    display: block;
+    font-size: 12px;
+    font-weight: 600;
+    color: var(--muted);
+    text-transform: uppercase;
+    letter-spacing: .05em;
+    margin-bottom: 6px;
+  }
+  .form-group input {
+    width: 100%;
+    height: 42px;
+    padding: 0 12px;
+    border: 1.5px solid var(--border);
+    border-radius: var(--radius);
+    font-family: inherit;
+    font-size: 14px;
+    color: var(--text);
+    background: var(--surface);
+    transition: border-color .15s, box-shadow .15s;
+    outline: none;
+  }
+  .form-group input:focus {
+    border-color: var(--primary);
+    box-shadow: 0 0 0 3px rgba(26,86,219,.12);
+  }
+  .form-group input::placeholder { color: #9ca3af; }
+
+  /* ── Button ── */
+  .btn {
+    width: 100%;
+    height: 44px;
+    background: var(--primary);
+    color: #fff;
+    border: none;
+    border-radius: var(--radius);
+    font-family: inherit;
+    font-size: 15px;
+    font-weight: 600;
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 8px;
+    margin-top: 8px;
+    transition: background .15s, transform .1s;
+  }
+  .btn:hover   { background: var(--primary-dark); }
+  .btn:active  { transform: scale(.98); }
+  .btn:disabled { opacity: .65; cursor: not-allowed; }
+
+  .spinner {
+    display: none;
+    width: 18px; height: 18px;
+    border: 2px solid rgba(255,255,255,.4);
+    border-top-color: #fff;
+    border-radius: 50%;
+    animation: spin .7s linear infinite;
+  }
+  @keyframes spin { to { transform: rotate(360deg); } }
+
+  /* ── Footer ── */
+  .footer {
+    text-align: center;
+    margin-top: 24px;
+    padding-top: 20px;
+    border-top: 1px solid var(--border);
+    font-size: 14px;
+    color: var(--muted);
+  }
+  .footer a { color: var(--primary); font-weight: 600; text-decoration: none; }
+  .footer a:hover { text-decoration: underline; }
+</style>
+</head>
+<body>
+
+<div class="card">
 
   <!-- Header -->
-  <div class="text-center mb-stack-lg">
-    <div class="inline-flex items-center justify-center w-12 h-12 rounded-full bg-primary-light text-primary mb-stack-sm">
-      <span class="material-symbols-outlined text-2xl" style="font-variation-settings: 'FILL' 1;">apartment</span>
+  <div class="header">
+    <div class="icon-wrap">
+      <span class="material-symbols-outlined">apartment</span>
     </div>
-    <h1 class="font-page-title text-page-title text-on-surface">Daftar Akun Baru</h1>
-    <p class="font-body text-body text-on-surface-variant mt-1">Manajemen Kos Al-Firdaus</p>
+    <h1>Daftar Akun Baru</h1>
+    <p>Manajemen Kos Al-Firdaus</p>
   </div>
 
   <!-- Alert Error -->
-  <div id="alert-error" class="hidden mb-4 bg-danger-bg border border-danger text-danger text-sm rounded px-4 py-3">
-    <ul id="alert-error-list" class="list-disc list-inside space-y-1"></ul>
+  <div class="alert error" id="alert-error">
+    <ul id="alert-error-list"></ul>
   </div>
 
   <!-- Alert Success -->
-  <div id="alert-success" class="hidden mb-4 bg-success-bg border border-success text-success text-sm rounded px-4 py-3 flex items-center gap-2">
-    <span class="material-symbols-outlined text-[18px]">check_circle</span>
+  <div class="alert success" id="alert-success">
+    <span class="material-symbols-outlined" style="font-size:18px;font-variation-settings:'FILL' 1">check_circle</span>
     <span>Akun berhasil dibuat! Mengalihkan ke halaman login...</span>
   </div>
 
   <!-- Form -->
-  <div class="space-y-stack-md">
-
-    <!-- Nama Lengkap -->
-    <div>
-      <label class="block font-label-muted text-label-muted text-on-surface-variant mb-1" for="nama">Nama Lengkap</label>
-      <input class="w-full bg-surface-container-lowest border border-border-base rounded px-3 py-2 font-body text-body text-on-surface focus:outline-none focus:border-primary focus:ring-1 focus:ring-primary transition-colors"
-             id="nama" type="text" placeholder="Nama lengkap Anda"/>
-    </div>
-
-    <!-- Email -->
-    <div>
-      <label class="block font-label-muted text-label-muted text-on-surface-variant mb-1" for="email">Email</label>
-      <input class="w-full bg-surface-container-lowest border border-border-base rounded px-3 py-2 font-body text-body text-on-surface focus:outline-none focus:border-primary focus:ring-1 focus:ring-primary transition-colors"
-             id="email" type="email" placeholder="nama@email.com"/>
-    </div>
-
-    <!-- Password -->
-    <div>
-      <label class="block font-label-muted text-label-muted text-on-surface-variant mb-1" for="password">Password</label>
-      <input class="w-full bg-surface-container-lowest border border-border-base rounded px-3 py-2 font-body text-body text-on-surface focus:outline-none focus:border-primary focus:ring-1 focus:ring-primary transition-colors"
-             id="password" type="password" placeholder="Minimal 8 karakter"/>
-    </div>
-
-    <!-- Konfirmasi Password -->
-    <div>
-      <label class="block font-label-muted text-label-muted text-on-surface-variant mb-1" for="confirm_password">Konfirmasi Password</label>
-      <input class="w-full bg-surface-container-lowest border border-border-base rounded px-3 py-2 font-body text-body text-on-surface focus:outline-none focus:border-primary focus:ring-1 focus:ring-primary transition-colors"
-             id="confirm_password" type="password" placeholder="Ulangi password"/>
-    </div>
-
-    <!-- Submit -->
-    <button id="btn-register"
-            class="w-full bg-primary hover:bg-primary-hover text-on-primary font-section-title text-section-title py-2 px-4 rounded transition-colors duration-200 mt-stack-md flex items-center justify-center gap-2"
-            type="button">
-      <span id="btn-register-text">Daftar</span>
-      <svg id="btn-register-spinner" class="hidden animate-spin h-4 w-4 text-white" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24">
-        <circle class="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" stroke-width="4"></circle>
-        <path class="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8v8H4z"></path>
-      </svg>
-    </button>
-
+  <div class="form-group">
+    <label for="nama">Nama Lengkap</label>
+    <input id="nama" type="text" placeholder="Nama lengkap Anda" autocomplete="name"/>
   </div>
 
+  <div class="form-group">
+    <label for="email">Email</label>
+    <input id="email" type="email" placeholder="nama@email.com" autocomplete="email"/>
+  </div>
+
+  <div class="form-group">
+    <label for="password">Password</label>
+    <input id="password" type="password" placeholder="Minimal 8 karakter" autocomplete="new-password"/>
+  </div>
+
+  <div class="form-group">
+    <label for="confirm_password">Konfirmasi Password</label>
+    <input id="confirm_password" type="password" placeholder="Ulangi password" autocomplete="new-password"/>
+  </div>
+
+  <button class="btn" id="btn-register" type="button">
+    <span id="btn-text">Daftar Sekarang</span>
+    <div class="spinner" id="spinner"></div>
+  </button>
+
   <!-- Footer -->
-  <div class="mt-stack-lg text-center">
-    <p class="font-body text-body text-on-surface-variant">
-      Sudah punya akun?
-      <a class="text-primary hover:text-primary-hover font-semibold transition-colors" href="login.html">Login</a>
-    </p>
+  <div class="footer">
+    Sudah punya akun? <a href="/login">Login</a>
   </div>
 
 </div>
 
-<script src="js/auth.js"></script>
+<script src="/frontend/js/auth.js"></script>
 <script>
-  // Jika sudah login, langsung redirect
+  // Redirect jika sudah login
   if (localStorage.getItem('token')) {
-    window.location.href = 'index.html';
+    window.location.href = '/dashboard';
   }
 
-  document.getElementById('btn-register').addEventListener('click', async () => {
-    const name             = document.getElementById('nama').value.trim();
-    const email            = document.getElementById('email').value.trim();
-    const password         = document.getElementById('password').value;
-    const confirmPassword  = document.getElementById('confirm_password').value;
-    const btnText          = document.getElementById('btn-register-text');
-    const btnSpinner       = document.getElementById('btn-register-spinner');
-    const alertErr         = document.getElementById('alert-error');
-    const alertErrList     = document.getElementById('alert-error-list');
-    const alertOk          = document.getElementById('alert-success');
+  const btnReg     = document.getElementById('btn-register');
+  const btnText    = document.getElementById('btn-text');
+  const spinner    = document.getElementById('spinner');
+  const alertErr   = document.getElementById('alert-error');
+  const alertList  = document.getElementById('alert-error-list');
+  const alertOk    = document.getElementById('alert-success');
 
-    // Reset
-    alertErr.classList.add('hidden');
-    alertOk.classList.add('hidden');
-    alertErrList.innerHTML = '';
+  function showError(messages) {
+    alertList.innerHTML = '';
+    alertOk.style.display = 'none';
+    messages.forEach(msg => {
+      const li = document.createElement('li');
+      li.textContent = msg;
+      alertList.appendChild(li);
+    });
+    alertErr.style.display = 'block';
+  }
 
-    // Validasi sisi client
-    const errors = [];
-    if (!name)                              errors.push('Nama lengkap wajib diisi.');
-    if (!email)                             errors.push('Email wajib diisi.');
-    if (!password)                          errors.push('Password wajib diisi.');
-    if (password.length < 8)               errors.push('Password minimal 8 karakter.');
-    if (password !== confirmPassword)       errors.push('Konfirmasi password tidak cocok.');
+  function setLoading(on) {
+    btnReg.disabled   = on;
+    btnText.textContent = on ? 'Mendaftar...' : 'Daftar Sekarang';
+    spinner.style.display = on ? 'block' : 'none';
+  }
 
-    if (errors.length > 0) {
-      errors.forEach(msg => {
-        const li = document.createElement('li');
-        li.textContent = msg;
-        alertErrList.appendChild(li);
-      });
-      alertErr.classList.remove('hidden');
-      return;
-    }
+  btnReg.addEventListener('click', async () => {
+    const name    = document.getElementById('nama').value.trim();
+    const email   = document.getElementById('email').value.trim();
+    const pass    = document.getElementById('password').value;
+    const confirm = document.getElementById('confirm_password').value;
 
-    // Loading
-    btnText.textContent = 'Mendaftar...';
-    btnSpinner.classList.remove('hidden');
+    // Reset alert
+    alertErr.style.display = 'none';
+    alertOk.style.display  = 'none';
 
+    // Validasi client-side
+    const errs = [];
+    if (!name)              errs.push('Nama lengkap wajib diisi.');
+    if (!email)             errs.push('Email wajib diisi.');
+    if (!pass)              errs.push('Password wajib diisi.');
+    if (pass.length < 8)    errs.push('Password minimal 8 karakter.');
+    if (pass !== confirm)   errs.push('Konfirmasi password tidak cocok.');
+    if (errs.length) { showError(errs); return; }
+
+    setLoading(true);
     try {
-      await register(name, email, password);
-      alertOk.classList.remove('hidden');
-      setTimeout(() => { window.location.href = 'login.html'; }, 1500);
+      // register() dari auth.js → POST /api/register
+      await register(name, email, pass);
+      alertOk.style.display = 'flex';
+      setTimeout(() => { window.location.href = '/login'; }, 1500);
     } catch (err) {
       const data = err.response?.data;
       if (data?.errors) {
-        // Validasi dari Laravel
-        Object.values(data.errors).flat().forEach(msg => {
-          const li = document.createElement('li');
-          li.textContent = msg;
-          alertErrList.appendChild(li);
-        });
+        // Validasi Laravel: { errors: { email: ['...'] } }
+        showError(Object.values(data.errors).flat());
       } else {
-        const li = document.createElement('li');
-        li.textContent = data?.message || 'Terjadi kesalahan. Coba lagi.';
-        alertErrList.appendChild(li);
+        showError([data?.message || 'Terjadi kesalahan. Coba lagi.']);
       }
-      alertErr.classList.remove('hidden');
     } finally {
-      btnText.textContent = 'Daftar';
-      btnSpinner.classList.add('hidden');
+      setLoading(false);
     }
+  });
+
+  // Enter key support
+  ['nama','email','password','confirm_password'].forEach(id => {
+    document.getElementById(id).addEventListener('keydown', e => {
+      if (e.key === 'Enter') btnReg.click();
+    });
   });
 </script>
 </body>
