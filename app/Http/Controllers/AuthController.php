@@ -22,7 +22,7 @@ class AuthController extends Controller
 
         if ($validator->fails()) {
             return response()->json([
-                'status'  => 'error',
+                'success' => false,
                 'message' => 'Validasi gagal.',
                 'errors'  => $validator->errors(),
             ], 422);
@@ -36,7 +36,7 @@ class AuthController extends Controller
         ]);
 
         return response()->json([
-            'status'  => 'success',
+            'success' => true,
             'message' => 'Akun berhasil dibuat.',
             'data'    => ['user' => $user],
         ], 201);
@@ -52,7 +52,7 @@ class AuthController extends Controller
 
         if ($validator->fails()) {
             return response()->json([
-                'status'  => 'error',
+                'success' => false,
                 'message' => 'Validasi gagal.',
                 'errors'  => $validator->errors(),
             ], 422);
@@ -63,13 +63,13 @@ class AuthController extends Controller
         try {
             if (!$token = JWTAuth::attempt($credentials)) {
                 return response()->json([
-                    'status'  => 'error',
+                    'success' => false,
                     'message' => 'Email atau password salah.',
                 ], 401);
             }
         } catch (JWTException $e) {
             return response()->json([
-                'status'  => 'error',
+                'success' => false,
                 'message' => 'Tidak dapat membuat token. Coba lagi.',
             ], 500);
         }
@@ -77,7 +77,7 @@ class AuthController extends Controller
         $user = auth()->user();
 
         return response()->json([
-            'status'  => 'success',
+            'success' => true,
             'message' => 'Login berhasil.',
             'data'    => [
                 'token' => $token,
@@ -96,7 +96,7 @@ class AuthController extends Controller
         }
 
         return response()->json([
-            'status'  => 'success',
+            'success' => true,
             'message' => 'Logout berhasil. Token telah dihanguskan.',
         ], 200);
     }
@@ -107,8 +107,9 @@ class AuthController extends Controller
         $user = auth()->user();
 
         return response()->json([
-            'status' => 'success',
-            'data'   => ['user' => $user],
+            'success' => true,
+            'message' => 'Berhasil mengambil data profil.',
+            'data'    => ['user' => $user],
         ], 200);
     }
 
@@ -125,7 +126,7 @@ class AuthController extends Controller
 
         if ($validator->fails()) {
             return response()->json([
-                'status'  => 'error',
+                'success' => false,
                 'message' => 'Validasi gagal.',
                 'errors'  => $validator->errors(),
             ], 422);
@@ -144,7 +145,7 @@ class AuthController extends Controller
         $user->save();
 
         return response()->json([
-            'status'  => 'success',
+            'success' => true,
             'message' => 'Profil berhasil diperbarui.',
             'data'    => ['user' => $user],
         ], 200);

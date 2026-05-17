@@ -4,6 +4,7 @@ use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\AuthController;
 use App\Http\Controllers\KamarController;
 use App\Http\Controllers\PenyewaController;
+use App\Http\Controllers\PembayaranController;
 
 // ═══════════════════════════════════════════════════════════════════════════
 // AUTH SERVICE ROUTES – Dev 1 (Hasan)
@@ -29,14 +30,18 @@ Route::middleware('jwt.auth')->group(function () {
 
     // ═══════════════════════════════════════════════════════════════════════
     // PAYMENT & REPORT ROUTES – Dev 3 (Hazel)
-    // Tambahkan di bawah ini setelah merge feature/payment
     // ═══════════════════════════════════════════════════════════════════════
-    // Route::get('/pembayaran',               [PembayaranController::class, 'index']);
-    // Route::post('/pembayaran',              [PembayaranController::class, 'store']);
-    // Route::get('/pembayaran/{id}',          [PembayaranController::class, 'show']);
-    // Route::get('/penyewa/{id}/pembayaran',  [PembayaranController::class, 'riwayatPenyewa']);
-    // Route::get('/laporan/bulanan',          [PembayaranController::class, 'laporanBulanan']);
-    // Route::get('/laporan/tunggakan',        [PembayaranController::class, 'tunggakan']);
-    // Route::get('/dashboard',               [PembayaranController::class, 'dashboard']);
 
+    // Laporan & Dashboard (harus sebelum route dengan {id} agar tidak bentrok)
+    Route::get('/laporan/bulanan',   [PembayaranController::class, 'laporanBulanan']);
+    Route::get('/laporan/tunggakan', [PembayaranController::class, 'tunggakan']);
+    Route::get('/dashboard',         [PembayaranController::class, 'dashboard']);
+
+    // Riwayat pembayaran per penyewa (nested di bawah penyewa)
+    Route::get('/penyewa/{id}/pembayaran', [PembayaranController::class, 'riwayatPenyewa']);
+
+    // CRUD Pembayaran
+    Route::get('/pembayaran',       [PembayaranController::class, 'index']);
+    Route::post('/pembayaran',      [PembayaranController::class, 'store']);
+    Route::get('/pembayaran/{id}',  [PembayaranController::class, 'show']);
 });

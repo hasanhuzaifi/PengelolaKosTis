@@ -2,298 +2,128 @@
 <html lang="id">
 <head>
 <meta charset="utf-8"/>
-<meta content="width=device-width, initial-scale=1.0" name="viewport"/>
-<title>Daftar Akun – Manajemen Kos Al-Firdaus</title>
-<link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700&display=swap" rel="stylesheet"/>
+<meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+<title>Daftar – Manajemen Kos Al-Firdaus</title>
+<link rel="stylesheet" href="/frontend/css/style.css"/>
 <link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:opsz,wght,FILL,GRAD@20..48,100..700,0..1,-50..200" rel="stylesheet"/>
 <script src="https://cdn.jsdelivr.net/npm/axios/dist/axios.min.js"></script>
-<style>
-  *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
-
-  :root {
-    --primary:       #1a56db;
-    --primary-dark:  #1341b0;
-    --primary-light: #eef3ff;
-    --success:       #057a55;
-    --success-bg:    #f0fdf4;
-    --success-bdr:   #6ee7b7;
-    --danger:        #c81e1e;
-    --danger-bg:     #fdf2f2;
-    --danger-bdr:    #f8b4b4;
-    --text:          #111928;
-    --muted:         #6b7280;
-    --border:        #e5e7eb;
-    --surface:       #ffffff;
-    --canvas:        #f3f4f6;
-    --radius:        10px;
-    --shadow:        0 1px 3px rgba(0,0,0,.08), 0 1px 2px rgba(0,0,0,.06);
-  }
-
-  body {
-    font-family: 'Plus Jakarta Sans', sans-serif;
-    background: var(--canvas);
-    min-height: 100vh;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    padding: 24px 16px;
-    color: var(--text);
-  }
-
-  .card {
-    background: var(--surface);
-    border: 1px solid var(--border);
-    border-radius: 16px;
-    box-shadow: var(--shadow);
-    width: 100%;
-    max-width: 420px;
-    padding: 36px 32px;
-  }
-
-  /* ── Header ── */
-  .header {
-    text-align: center;
-    margin-bottom: 28px;
-  }
-  .icon-wrap {
-    width: 52px; height: 52px;
-    background: var(--primary-light);
-    border-radius: 14px;
-    display: inline-flex;
-    align-items: center;
-    justify-content: center;
-    margin-bottom: 14px;
-  }
-  .icon-wrap .material-symbols-outlined {
-    font-size: 26px;
-    color: var(--primary);
-    font-variation-settings: 'FILL' 1;
-  }
-  .header h1 { font-size: 20px; font-weight: 700; margin-bottom: 4px; }
-  .header p  { font-size: 14px; color: var(--muted); }
-
-  /* ── Alert ── */
-  .alert {
-    display: none;
-    border-radius: 8px;
-    padding: 12px 14px;
-    font-size: 13px;
-    margin-bottom: 18px;
-    line-height: 1.5;
-  }
-  .alert.error   { background: var(--danger-bg);  border: 1px solid var(--danger-bdr);  color: var(--danger); }
-  .alert.success { background: var(--success-bg); border: 1px solid var(--success-bdr); color: var(--success); display: flex; align-items: center; gap: 8px; }
-  .alert ul { padding-left: 18px; margin: 0; }
-  .alert li { margin-top: 2px; }
-
-  /* ── Form ── */
-  .form-group { margin-bottom: 16px; }
-  .form-group label {
-    display: block;
-    font-size: 12px;
-    font-weight: 600;
-    color: var(--muted);
-    text-transform: uppercase;
-    letter-spacing: .05em;
-    margin-bottom: 6px;
-  }
-  .form-group input {
-    width: 100%;
-    height: 42px;
-    padding: 0 12px;
-    border: 1.5px solid var(--border);
-    border-radius: var(--radius);
-    font-family: inherit;
-    font-size: 14px;
-    color: var(--text);
-    background: var(--surface);
-    transition: border-color .15s, box-shadow .15s;
-    outline: none;
-  }
-  .form-group input:focus {
-    border-color: var(--primary);
-    box-shadow: 0 0 0 3px rgba(26,86,219,.12);
-  }
-  .form-group input::placeholder { color: #9ca3af; }
-
-  /* ── Button ── */
-  .btn {
-    width: 100%;
-    height: 44px;
-    background: var(--primary);
-    color: #fff;
-    border: none;
-    border-radius: var(--radius);
-    font-family: inherit;
-    font-size: 15px;
-    font-weight: 600;
-    cursor: pointer;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    gap: 8px;
-    margin-top: 8px;
-    transition: background .15s, transform .1s;
-  }
-  .btn:hover   { background: var(--primary-dark); }
-  .btn:active  { transform: scale(.98); }
-  .btn:disabled { opacity: .65; cursor: not-allowed; }
-
-  .spinner {
-    display: none;
-    width: 18px; height: 18px;
-    border: 2px solid rgba(255,255,255,.4);
-    border-top-color: #fff;
-    border-radius: 50%;
-    animation: spin .7s linear infinite;
-  }
-  @keyframes spin { to { transform: rotate(360deg); } }
-
-  /* ── Footer ── */
-  .footer {
-    text-align: center;
-    margin-top: 24px;
-    padding-top: 20px;
-    border-top: 1px solid var(--border);
-    font-size: 14px;
-    color: var(--muted);
-  }
-  .footer a { color: var(--primary); font-weight: 600; text-decoration: none; }
-  .footer a:hover { text-decoration: underline; }
-</style>
 </head>
 <body>
 
-<div class="card">
+<div class="auth-wrapper">
+  <div class="auth-card">
 
-  <!-- Header -->
-  <div class="header">
-    <div class="icon-wrap">
-      <span class="material-symbols-outlined">apartment</span>
+    <!-- Logo -->
+    <div class="auth-logo">
+      <div class="auth-logo-icon">
+        <span class="material-symbols-outlined">home_work</span>
+      </div>
+      <h1>Al-Firdaus</h1>
+      <p>Sistem Manajemen Kos</p>
     </div>
-    <h1>Daftar Akun Baru</h1>
-    <p>Manajemen Kos Al-Firdaus</p>
+
+    <div class="auth-title">Buat Akun Baru</div>
+    <div class="auth-subtitle">Daftarkan akun pemilik kos Anda</div>
+
+    <!-- Alert Error -->
+    <div id="alert-error" class="alert alert-danger" style="display:none;">
+      <span class="material-symbols-outlined">error</span>
+      <span id="alert-error-msg">Terjadi kesalahan.</span>
+    </div>
+
+    <!-- Alert Success -->
+    <div id="alert-success" class="alert alert-success" style="display:none;">
+      <span class="material-symbols-outlined">check_circle</span>
+      <span>Akun berhasil dibuat! Mengalihkan ke halaman login…</span>
+    </div>
+
+    <!-- Form -->
+    <div>
+      <div class="form-group">
+        <label class="form-label" for="name">Nama Lengkap</label>
+        <input class="form-input" id="name" type="text" placeholder="Budi Santoso" autocomplete="name" required/>
+      </div>
+
+      <div class="form-group">
+        <label class="form-label" for="email">Email</label>
+        <input class="form-input" id="email" type="email" placeholder="admin@kos.com" autocomplete="email" required/>
+      </div>
+
+      <div class="form-group">
+        <label class="form-label" for="password">Password</label>
+        <input class="form-input" id="password" type="password" placeholder="Minimal 8 karakter" autocomplete="new-password" required/>
+      </div>
+
+      <div class="form-group">
+        <label class="form-label" for="password_confirmation">Konfirmasi Password</label>
+        <input class="form-input" id="password_confirmation" type="password" placeholder="Ulangi password" autocomplete="new-password" required/>
+      </div>
+
+      <button class="btn btn-primary" id="btn-register" onclick="doRegister()"
+              style="width:100%;justify-content:center;margin-top:8px;">
+        <span class="material-symbols-outlined">person_add</span> Daftar Sekarang
+      </button>
+    </div>
+
+    <p style="text-align:center;font-size:13px;color:var(--muted);margin-top:20px;">
+      Sudah punya akun?
+      <a href="/login" style="color:var(--primary);font-weight:600;text-decoration:none;">Masuk di sini</a>
+    </p>
+
   </div>
-
-  <!-- Alert Error -->
-  <div class="alert error" id="alert-error">
-    <ul id="alert-error-list"></ul>
-  </div>
-
-  <!-- Alert Success -->
-  <div class="alert success" id="alert-success">
-    <span class="material-symbols-outlined" style="font-size:18px;font-variation-settings:'FILL' 1">check_circle</span>
-    <span>Akun berhasil dibuat! Mengalihkan ke halaman login...</span>
-  </div>
-
-  <!-- Form -->
-  <div class="form-group">
-    <label for="nama">Nama Lengkap</label>
-    <input id="nama" type="text" placeholder="Nama lengkap Anda" autocomplete="name"/>
-  </div>
-
-  <div class="form-group">
-    <label for="email">Email</label>
-    <input id="email" type="email" placeholder="nama@email.com" autocomplete="email"/>
-  </div>
-
-  <div class="form-group">
-    <label for="password">Password</label>
-    <input id="password" type="password" placeholder="Minimal 8 karakter" autocomplete="new-password"/>
-  </div>
-
-  <div class="form-group">
-    <label for="confirm_password">Konfirmasi Password</label>
-    <input id="confirm_password" type="password" placeholder="Ulangi password" autocomplete="new-password"/>
-  </div>
-
-  <button class="btn" id="btn-register" type="button">
-    <span id="btn-text">Daftar Sekarang</span>
-    <div class="spinner" id="spinner"></div>
-  </button>
-
-  <!-- Footer -->
-  <div class="footer">
-    Sudah punya akun? <a href="/login">Login</a>
-  </div>
-
 </div>
 
 <script src="/frontend/js/auth.js"></script>
 <script>
-  // Redirect jika sudah login
-  if (localStorage.getItem('token')) {
+if (localStorage.getItem('token')) {
     window.location.href = '/dashboard';
-  }
+}
 
-  const btnReg     = document.getElementById('btn-register');
-  const btnText    = document.getElementById('btn-text');
-  const spinner    = document.getElementById('spinner');
-  const alertErr   = document.getElementById('alert-error');
-  const alertList  = document.getElementById('alert-error-list');
-  const alertOk    = document.getElementById('alert-success');
+async function doRegister() {
+    const name     = document.getElementById('name').value.trim();
+    const email    = document.getElementById('email').value.trim();
+    const password = document.getElementById('password').value;
+    const confirm  = document.getElementById('password_confirmation').value;
+    const btn      = document.getElementById('btn-register');
 
-  function showError(messages) {
-    alertList.innerHTML = '';
-    alertOk.style.display = 'none';
-    messages.forEach(msg => {
-      const li = document.createElement('li');
-      li.textContent = msg;
-      alertList.appendChild(li);
-    });
-    alertErr.style.display = 'block';
-  }
-
-  function setLoading(on) {
-    btnReg.disabled   = on;
-    btnText.textContent = on ? 'Mendaftar...' : 'Daftar Sekarang';
-    spinner.style.display = on ? 'block' : 'none';
-  }
-
-  btnReg.addEventListener('click', async () => {
-    const name    = document.getElementById('nama').value.trim();
-    const email   = document.getElementById('email').value.trim();
-    const pass    = document.getElementById('password').value;
-    const confirm = document.getElementById('confirm_password').value;
-
-    // Reset alert
-    alertErr.style.display = 'none';
-    alertOk.style.display  = 'none';
-
-    // Validasi client-side
-    const errs = [];
-    if (!name)              errs.push('Nama lengkap wajib diisi.');
-    if (!email)             errs.push('Email wajib diisi.');
-    if (!pass)              errs.push('Password wajib diisi.');
-    if (pass.length < 8)    errs.push('Password minimal 8 karakter.');
-    if (pass !== confirm)   errs.push('Konfirmasi password tidak cocok.');
-    if (errs.length) { showError(errs); return; }
-
-    setLoading(true);
-    try {
-      // register() dari auth.js → POST /api/register
-      await register(name, email, pass);
-      alertOk.style.display = 'flex';
-      setTimeout(() => { window.location.href = '/login'; }, 1500);
-    } catch (err) {
-      const data = err.response?.data;
-      if (data?.errors) {
-        // Validasi Laravel: { errors: { email: ['...'] } }
-        showError(Object.values(data.errors).flat());
-      } else {
-        showError([data?.message || 'Terjadi kesalahan. Coba lagi.']);
-      }
-    } finally {
-      setLoading(false);
+    if (!name || !email || !password || !confirm) {
+        showError('Semua field wajib diisi.');
+        return;
     }
-  });
+    if (password !== confirm) {
+        showError('Konfirmasi password tidak cocok.');
+        return;
+    }
+    if (password.length < 8) {
+        showError('Password minimal 8 karakter.');
+        return;
+    }
 
-  // Enter key support
-  ['nama','email','password','confirm_password'].forEach(id => {
-    document.getElementById(id).addEventListener('keydown', e => {
-      if (e.key === 'Enter') btnReg.click();
-    });
-  });
+    btn.disabled = true;
+    btn.innerHTML = '<span class="spinner" style="width:16px;height:16px;border-width:2px;"></span> Memproses…';
+    hideError();
+
+    try {
+        await register(name, email, password);
+        document.getElementById('alert-success').style.display = 'flex';
+        setTimeout(() => { window.location.href = '/login'; }, 1500);
+    } catch (err) {
+        const errors = err.response?.data?.errors;
+        let msg = err.response?.data?.message || 'Pendaftaran gagal.';
+        if (errors) msg = Object.values(errors).flat().join(' ');
+        showError(msg);
+        btn.disabled = false;
+        btn.innerHTML = '<span class="material-symbols-outlined">person_add</span> Daftar Sekarang';
+    }
+}
+
+function showError(msg) {
+    document.getElementById('alert-error-msg').textContent = msg;
+    document.getElementById('alert-error').style.display = 'flex';
+}
+function hideError() {
+    document.getElementById('alert-error').style.display = 'none';
+}
 </script>
 </body>
 </html>

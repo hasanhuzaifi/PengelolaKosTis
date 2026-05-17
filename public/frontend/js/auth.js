@@ -30,7 +30,7 @@ axios.interceptors.response.use(
         if (error.response && error.response.status === 401) {
             clearAuth();
             const path = window.location.pathname;
-            if (!path.includes('login.html') && !path.includes('register.html')) {
+            if (!path.includes('/login') && !path.includes('/register')) {
                 window.location.href = '/login';
             }
         }

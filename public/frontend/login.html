@@ -2,269 +2,111 @@
 <html lang="id">
 <head>
 <meta charset="utf-8"/>
-<meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+<meta name="viewport" content="width=device-width, initial-scale=1.0"/>
 <title>Login – Manajemen Kos Al-Firdaus</title>
-<link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700&display=swap" rel="stylesheet"/>
+<link rel="stylesheet" href="/frontend/css/style.css"/>
 <link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:opsz,wght,FILL,GRAD@20..48,100..700,0..1,-50..200" rel="stylesheet"/>
 <script src="https://cdn.jsdelivr.net/npm/axios/dist/axios.min.js"></script>
-<style>
-  *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
-
-  :root {
-    --primary:       #1a56db;
-    --primary-dark:  #1341b0;
-    --primary-light: #eef3ff;
-    --success:       #057a55;
-    --success-bg:    #f0fdf4;
-    --success-bdr:   #6ee7b7;
-    --danger:        #c81e1e;
-    --danger-bg:     #fdf2f2;
-    --danger-bdr:    #f8b4b4;
-    --text:          #111928;
-    --muted:         #6b7280;
-    --border:        #e5e7eb;
-    --surface:       #ffffff;
-    --canvas:        #f3f4f6;
-    --radius:        10px;
-    --shadow:        0 1px 3px rgba(0,0,0,.08), 0 1px 2px rgba(0,0,0,.06);
-  }
-
-  body {
-    font-family: 'Plus Jakarta Sans', sans-serif;
-    background: var(--canvas);
-    min-height: 100vh;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    padding: 24px 16px;
-    color: var(--text);
-  }
-
-  .card {
-    background: var(--surface);
-    border: 1px solid var(--border);
-    border-radius: 16px;
-    box-shadow: var(--shadow);
-    width: 100%;
-    max-width: 400px;
-    padding: 36px 32px;
-  }
-
-  .header {
-    text-align: center;
-    margin-bottom: 28px;
-  }
-  .icon-wrap {
-    width: 52px; height: 52px;
-    background: var(--primary-light);
-    border-radius: 14px;
-    display: inline-flex;
-    align-items: center;
-    justify-content: center;
-    margin-bottom: 14px;
-  }
-  .icon-wrap .material-symbols-outlined {
-    font-size: 26px;
-    color: var(--primary);
-    font-variation-settings: 'FILL' 1;
-  }
-  .header h1 { font-size: 20px; font-weight: 700; margin-bottom: 4px; }
-  .header p  { font-size: 14px; color: var(--muted); }
-
-  .alert {
-    display: none;
-    border-radius: 8px;
-    padding: 12px 14px;
-    font-size: 13px;
-    margin-bottom: 18px;
-    line-height: 1.5;
-    align-items: center;
-    gap: 8px;
-  }
-  .alert.error   { background: var(--danger-bg);  border: 1px solid var(--danger-bdr);  color: var(--danger); }
-  .alert.success { background: var(--success-bg); border: 1px solid var(--success-bdr); color: var(--success); }
-
-  .form-group { margin-bottom: 16px; }
-  .form-group label {
-    display: block;
-    font-size: 12px;
-    font-weight: 600;
-    color: var(--muted);
-    text-transform: uppercase;
-    letter-spacing: .05em;
-    margin-bottom: 6px;
-  }
-  .form-group input {
-    width: 100%;
-    height: 42px;
-    padding: 0 12px;
-    border: 1.5px solid var(--border);
-    border-radius: var(--radius);
-    font-family: inherit;
-    font-size: 14px;
-    color: var(--text);
-    background: var(--surface);
-    transition: border-color .15s, box-shadow .15s;
-    outline: none;
-  }
-  .form-group input:focus {
-    border-color: var(--primary);
-    box-shadow: 0 0 0 3px rgba(26,86,219,.12);
-  }
-  .form-group input::placeholder { color: #9ca3af; }
-
-  .btn {
-    width: 100%;
-    height: 44px;
-    background: var(--primary);
-    color: #fff;
-    border: none;
-    border-radius: var(--radius);
-    font-family: inherit;
-    font-size: 15px;
-    font-weight: 600;
-    cursor: pointer;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    gap: 8px;
-    margin-top: 8px;
-    transition: background .15s, transform .1s;
-  }
-  .btn:hover   { background: var(--primary-dark); }
-  .btn:active  { transform: scale(.98); }
-  .btn:disabled { opacity: .65; cursor: not-allowed; }
-
-  .spinner {
-    display: none;
-    width: 18px; height: 18px;
-    border: 2px solid rgba(255,255,255,.4);
-    border-top-color: #fff;
-    border-radius: 50%;
-    animation: spin .7s linear infinite;
-  }
-  @keyframes spin { to { transform: rotate(360deg); } }
-
-  .footer {
-    text-align: center;
-    margin-top: 24px;
-    padding-top: 20px;
-    border-top: 1px solid var(--border);
-    font-size: 14px;
-    color: var(--muted);
-  }
-  .footer a { color: var(--primary); font-weight: 600; text-decoration: none; }
-  .footer a:hover { text-decoration: underline; }
-</style>
 </head>
 <body>
 
-<div class="card">
+<div class="auth-wrapper">
+  <div class="auth-card">
 
-  <!-- Header -->
-  <div class="header">
-    <div class="icon-wrap">
-      <span class="material-symbols-outlined">business</span>
+    <!-- Logo -->
+    <div class="auth-logo">
+      <div class="auth-logo-icon">
+        <span class="material-symbols-outlined">home_work</span>
+      </div>
+      <h1>Al-Firdaus</h1>
+      <p>Sistem Manajemen Kos</p>
     </div>
-    <h1>Manajemen Kos Al-Firdaus</h1>
-    <p>Masuk ke akun Anda untuk melanjutkan</p>
+
+    <div class="auth-title">Masuk ke Akun</div>
+    <div class="auth-subtitle">Masukkan kredensial pemilik kos Anda</div>
+
+    <!-- Alert Error -->
+    <div id="alert-error" class="alert alert-danger" style="display:none;">
+      <span class="material-symbols-outlined">error</span>
+      <span id="alert-error-msg">Email atau password salah.</span>
+    </div>
+
+    <!-- Alert Success -->
+    <div id="alert-success" class="alert alert-success" style="display:none;">
+      <span class="material-symbols-outlined">check_circle</span>
+      <span>Login berhasil! Mengalihkan…</span>
+    </div>
+
+    <!-- Form -->
+    <div>
+      <div class="form-group">
+        <label class="form-label" for="email">Email</label>
+        <input class="form-input" id="email" type="email" placeholder="admin@kos.com" autocomplete="email" required/>
+      </div>
+
+      <div class="form-group">
+        <label class="form-label" for="password">Password</label>
+        <input class="form-input" id="password" type="password" placeholder="••••••••" autocomplete="current-password" required/>
+      </div>
+
+      <button class="btn btn-primary" id="btn-login" onclick="doLogin()"
+              style="width:100%;justify-content:center;margin-top:8px;">
+        <span class="material-symbols-outlined">login</span> Masuk
+      </button>
+    </div>
+
+    <p style="text-align:center;font-size:13px;color:var(--muted);margin-top:20px;">
+      Belum punya akun?
+      <a href="/register" style="color:var(--primary);font-weight:600;text-decoration:none;">Daftar di sini</a>
+    </p>
+
   </div>
-
-  <!-- Alert Error -->
-  <div class="alert error" id="alert-error">
-    <span class="material-symbols-outlined" style="font-size:18px;font-variation-settings:'FILL' 1;flex-shrink:0">error</span>
-    <span id="alert-error-msg">Email atau password salah.</span>
-  </div>
-
-  <!-- Alert Success -->
-  <div class="alert success" id="alert-success">
-    <span class="material-symbols-outlined" style="font-size:18px;font-variation-settings:'FILL' 1;flex-shrink:0">check_circle</span>
-    <span>Login berhasil! Mengalihkan ke dashboard...</span>
-  </div>
-
-  <!-- Form -->
-  <div class="form-group">
-    <label for="email">Email</label>
-    <input id="email" type="email" placeholder="nama@email.com" autocomplete="email"/>
-  </div>
-
-  <div class="form-group">
-    <label for="password">Password</label>
-    <input id="password" type="password" placeholder="••••••••" autocomplete="current-password"/>
-  </div>
-
-  <button class="btn" id="btn-login" type="button">
-    <span id="btn-text">Login</span>
-    <div class="spinner" id="spinner"></div>
-  </button>
-
-  <!-- Footer -->
-  <div class="footer">
-    Belum punya akun? <a href="/register">Daftar</a>
-  </div>
-
 </div>
 
 <script src="/frontend/js/auth.js"></script>
 <script>
-  // Redirect jika sudah login
-  if (localStorage.getItem('token')) {
+// Jika sudah login, redirect
+if (localStorage.getItem('token')) {
     window.location.href = '/dashboard';
-  }
+}
 
-  const btnLogin   = document.getElementById('btn-login');
-  const btnText    = document.getElementById('btn-text');
-  const spinner    = document.getElementById('spinner');
-  const alertErr   = document.getElementById('alert-error');
-  const alertErrMsg= document.getElementById('alert-error-msg');
-  const alertOk    = document.getElementById('alert-success');
+document.addEventListener('keydown', (e) => {
+    if (e.key === 'Enter') doLogin();
+});
 
-  function showError(msg) {
-    alertErrMsg.textContent = msg;
-    alertErr.style.display = 'flex';
-    alertOk.style.display  = 'none';
-  }
+async function doLogin() {
+    const email    = document.getElementById('email').value.trim();
+    const password = document.getElementById('password').value;
+    const btn      = document.getElementById('btn-login');
 
-  function setLoading(on) {
-    btnLogin.disabled       = on;
-    btnText.textContent     = on ? 'Memproses...' : 'Login';
-    spinner.style.display   = on ? 'block' : 'none';
-  }
-
-  btnLogin.addEventListener('click', async () => {
-    const email = document.getElementById('email').value.trim();
-    const pass  = document.getElementById('password').value;
-
-    alertErr.style.display = 'none';
-    alertOk.style.display  = 'none';
-
-    if (!email || !pass) {
-      showError('Email dan password wajib diisi.');
-      return;
+    if (!email || !password) {
+        showError('Email dan password wajib diisi.');
+        return;
     }
 
-    setLoading(true);
+    btn.disabled = true;
+    btn.innerHTML = '<span class="spinner" style="width:16px;height:16px;border-width:2px;"></span> Memproses…';
+    hideError();
+
     try {
-      // login() dari auth.js → POST /api/login
-      // Backend returns: { status:'success', data:{ token, user } }
-      await login(email, pass);
-      alertOk.style.display = 'flex';
-      setTimeout(() => { window.location.href = '/dashboard'; }, 1200);
+        await login(email, password);
+        document.getElementById('alert-success').style.display = 'flex';
+        setTimeout(() => { window.location.href = '/dashboard'; }, 800);
     } catch (err) {
-      const msg = err.response?.data?.message || 'Email atau password salah.';
-      showError(msg);
-    } finally {
-      setLoading(false);
+        const msg = err.response?.data?.message || 'Login gagal. Periksa kembali email dan password.';
+        showError(msg);
+        btn.disabled = false;
+        btn.innerHTML = '<span class="material-symbols-outlined">login</span> Masuk';
     }
-  });
+}
 
-  // Enter key
-  document.getElementById('password').addEventListener('keydown', e => {
-    if (e.key === 'Enter') btnLogin.click();
-  });
-  document.getElementById('email').addEventListener('keydown', e => {
-    if (e.key === 'Enter') btnLogin.click();
-  });
+function showError(msg) {
+    document.getElementById('alert-error-msg').textContent = msg;
+    document.getElementById('alert-error').style.display = 'flex';
+}
+function hideError() {
+    document.getElementById('alert-error').style.display = 'none';
+}
 </script>
 </body>
 </html>

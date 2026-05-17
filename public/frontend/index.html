@@ -1,0 +1,179 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+<meta charset="utf-8"/>
+<meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+<title>Dashboard – Manajemen Kos Al-Firdaus</title>
+<link rel="stylesheet" href="/frontend/css/style.css"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:opsz,wght,FILL,GRAD@20..48,100..700,0..1,-50..200" rel="stylesheet"/>
+<script src="https://cdn.jsdelivr.net/npm/axios/dist/axios.min.js"></script>
+</head>
+<body class="layout">
+
+<!-- Sidebar -->
+<aside class="sidebar">
+  <div class="sidebar-brand">
+    <h1>Al-Firdaus</h1>
+    <p>Manajemen Kos</p>
+  </div>
+  <nav class="sidebar-nav">
+    <a href="/dashboard"      class="nav-item active">
+      <span class="material-symbols-outlined">dashboard</span> Dashboard
+    </a>
+    <a href="/kamar"      class="nav-item">
+      <span class="material-symbols-outlined">meeting_room</span> Kamar
+    </a>
+    <a href="/penyewa"    class="nav-item">
+      <span class="material-symbols-outlined">group</span> Penyewa
+    </a>
+    <a href="/pembayaran" class="nav-item">
+      <span class="material-symbols-outlined">payments</span> Pembayaran
+    </a>
+  </nav>
+  <div class="sidebar-bottom">
+    <button class="nav-item" onclick="logout()">
+      <span class="material-symbols-outlined">logout</span> Keluar
+    </button>
+  </div>
+</aside>
+
+<!-- Header -->
+<header class="header">
+  <span class="header-title">Dashboard</span>
+  <div class="header-user">
+    <span class="material-symbols-outlined">account_circle</span>
+    <span id="user-name">Admin</span>
+  </div>
+</header>
+
+<!-- Main -->
+<main class="main">
+
+  <!-- Page Header -->
+  <div class="page-header">
+    <div>
+      <h2>Dashboard</h2>
+      <p id="period-label">Memuat data…</p>
+    </div>
+    <button class="btn btn-outline btn-sm" onclick="loadDashboard()">
+      <span class="material-symbols-outlined">refresh</span> Refresh
+    </button>
+  </div>
+
+  <!-- Stat Cards -->
+  <div class="stats-row" id="stats-row">
+    <div class="stat-card">
+      <div class="stat-card-header">
+        <div>
+          <div class="stat-label">Total Kamar</div>
+          <div class="stat-number" id="stat-total-kamar"><span class="spinner"></span></div>
+        </div>
+        <div class="stat-icon blue"><span class="material-symbols-outlined">home</span></div>
+      </div>
+    </div>
+    <div class="stat-card">
+      <div class="stat-card-header">
+        <div>
+          <div class="stat-label">Kamar Tersedia</div>
+          <div class="stat-number" id="stat-tersedia"><span class="spinner"></span></div>
+        </div>
+        <div class="stat-icon green"><span class="material-symbols-outlined">check_circle</span></div>
+      </div>
+    </div>
+    <div class="stat-card">
+      <div class="stat-card-header">
+        <div>
+          <div class="stat-label">Kamar Terisi</div>
+          <div class="stat-number" id="stat-terisi"><span class="spinner"></span></div>
+        </div>
+        <div class="stat-icon orange"><span class="material-symbols-outlined">person</span></div>
+      </div>
+    </div>
+    <div class="stat-card">
+      <div class="stat-card-header">
+        <div>
+          <div class="stat-label">Pemasukan Bulan Ini</div>
+          <div class="stat-number" id="stat-pemasukan" style="font-size:18px;"><span class="spinner"></span></div>
+        </div>
+        <div class="stat-icon green"><span class="material-symbols-outlined">payments</span></div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Row: Penyewa Aktif + Tunggakan -->
+  <div style="display:grid;grid-template-columns:1fr 1fr;gap:16px;margin-bottom:20px;">
+
+    <!-- Total Penyewa Aktif -->
+    <div class="card">
+      <div class="card-header">
+        <span class="card-title">Penyewa Aktif</span>
+        <a href="/penyewa" class="btn btn-outline btn-sm">Lihat Semua</a>
+      </div>
+      <div class="card-body" style="display:flex;align-items:center;gap:16px;">
+        <div class="stat-icon blue" style="width:56px;height:56px;flex-shrink:0;">
+          <span class="material-symbols-outlined" style="font-size:28px;">group</span>
+        </div>
+        <div>
+          <div class="stat-number" id="stat-penyewa"><span class="spinner"></span></div>
+          <div class="stat-label">Penyewa terdaftar aktif</div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Tunggakan -->
+    <div class="card">
+      <div class="card-header">
+        <span class="card-title">Tunggakan Bulan Ini</span>
+        <a href="/pembayaran" class="btn btn-outline btn-sm">Detail</a>
+      </div>
+      <div class="card-body">
+        <div id="tunggakan-list">
+          <div style="text-align:center;color:var(--muted);padding:16px;">
+            <span class="spinner"></span>
+          </div>
+        </div>
+      </div>
+    </div>
+
+  </div>
+
+  <!-- Tabel Pembayaran Terbaru -->
+  <div class="card">
+    <div class="card-header">
+      <span class="card-title">Pembayaran Terbaru</span>
+      <a href="/pembayaran" class="btn btn-outline btn-sm">
+        <span class="material-symbols-outlined">arrow_forward</span> Semua
+      </a>
+    </div>
+    <div class="table-wrapper">
+      <table class="data-table">
+        <thead>
+          <tr>
+            <th>#</th>
+            <th>Penyewa</th>
+            <th>Kamar</th>
+            <th>Bulan / Tahun</th>
+            <th>Nominal</th>
+            <th>Status</th>
+          </tr>
+        </thead>
+        <tbody id="tabel-pembayaran">
+          <tr class="loading-row"><td colspan="6"><span class="spinner"></span></td></tr>
+        </tbody>
+      </table>
+    </div>
+    <div class="empty-state" id="empty-pembayaran">
+      <span class="material-symbols-outlined">receipt_long</span>
+      <p>Belum ada data pembayaran</p>
+    </div>
+  </div>
+
+</main>
+
+<!-- Toast Container -->
+<div id="toast-container"></div>
+
+<script src="/frontend/js/auth.js"></script>
+<script src="/frontend/js/dashboard.js"></script>
+</body>
+</html>
